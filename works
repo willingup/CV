@@ -1,0 +1,12 @@
+1、灰度取反
+P1= imread('Penguins.jpg');
+imshow(P1)
+P2 = rgb2gray(P1);
+P3 = imcomplement(P2);
+P3 = 255 – P2;
+imshow(P3);
+
+2、二值化处理
+I = imread('rice.jpg');
+Thresh = graythresh(i); //得到合适的阈值
+I2 = im2bw(I,thresh); 
