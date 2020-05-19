@@ -1,12 +1,101 @@
-1、灰度取反
+1、灰度反色
 P1= imread('Penguins.jpg');
 imshow(P1)
 P2 = rgb2gray(P1);
-P3 = imcomplement(P2);
+
 P3 = 255 – P2;
-imshow(P3);
+figure,imshow(P3);
+或者：
+P3 = imadjust(P2,[0,1],[1,0]);
+figure,imshow(P3);
 
 2、二值化处理
 I = imread('rice.jpg');
 Thresh = graythresh(i); //得到合适的阈值
 I2 = im2bw(I,thresh); 
+
+逐个像素处理分割
+I = imread('rice,jpg');
+Thresh = graythresh(I);
+[m,n] = size(I);
+
+  for i = 1:m
+    for j = 1:n
+      tmp = I(i,j);
+      if(tmp >= Thresh*255)
+        tmp = 255;
+      else
+        tmp = 0;
+      end
+    end
+  end
+imshow(I);
+ 
+3、二值化取反
+close all;
+clc;
+I = imread('rice.jpg');
+I1 = im2bw(I);
+I2 = imcomplement(I1);
+imshow(I2);
+
+均值滤波
+
+//添加高斯噪声
+ image=imread('rice.tif');
+[width,height,z]=size(image);
+subplot(1,2,1);
+imshow(image);
+title('原图');
+av=0;
+std=0.1;
+u1=rand(width,height);
+u2=rand(width,height);
+x=std*sqrt(-2*log(u1)).*cos(2*pi*u2)+av;
+result1=double(image)/255+x;
+result1=uint8(255*result1);
+subplot(1,2,2);
+imshow(result1);
+title('加入均值为0，标准差为0.1的高斯噪声后');
+
+//均值滤波
+A = fspecial('average');
+Y = filter2(A,g)/255;
+figure,imshow(Y),title('系统均值滤波');
+function d = averfilter(x,n);
+a(1:n,1:n)=1;
+[height,width] = size(x);
+x1 = double(x);
+x2 = x1;
+for i=1:height-n+1
+  for j=1:width-n+1
+    c = x1(i:i+(n-1),j:j+(n-1)).*a;
+    s = sum(sum(c));
+    x2(i+(n-1)/2,j+(n-1)/2)=s/(n*n);
+  end
+end
+d = unit8(x2);
+
+Y2 = averfilter(g,n);
+figure,imshow(Y2),title('自定义均值滤波');
+
+
+  
+for y = 2 : width-1
+  for x = 2 : height-1
+    sum = 0;
+    for j = -1:1
+      for i = -1:1
+        sum = sum + I(x+i,x+j)/9;
+      end
+    end
+  I(x,y) = sum;
+ end
+end
+figure(2);imshow(I);
+
+
+
+
+
+    
